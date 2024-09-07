@@ -32,7 +32,13 @@ router.get('/shop', async (req, res) => {
     try{
         const response = await fetch(url_shop);
         const data = await response.json();
-
+        const filteredData = data.result.results.map(item => ({
+            NAME: item.綠色商店名稱,
+            ADDRESS: item.聯絡地址,
+         
+        }));
+        console.log('Filtered data:', filteredData[0]);
+        res.json(filteredData);
     }
     catch(error){
         console.error('Error:', error);

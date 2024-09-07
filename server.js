@@ -1,33 +1,11 @@
 const express = require('express');
-const fetch = require('node-fetch');
+const foodRouter = require('./food');
 
 const app = express();
 const port = 3000;
 
-const url = 'https://data.taipei/api/v1/dataset/bdc841eb-e8c8-41ee-abfc-1e198a96e905?scope=resourceAquire';
-
-app.get('/food', async (req, res) => {
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        // 假設數據在 data.result.results 中
-        const filteredData = data.result.results.map(item => ({
-            ORG_NAME: item.ORG_NAME,
-            ADDRESS: item.ADDRESS,
-            PERSON_IN_CHARGE: item.PERSON_IN_CHARGE,
-            POST_DATE: item.POST_DATE,
-            LAT: item.LAT,
-            LON: item.LON
-        }));
-
-        console.log('Filtered data:', filteredData[0]); // 記錄第一項以供檢查
-        res.json(filteredData);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'An error occurred while fetching or processing data' });
-    }
-});
+// 使用 /food 路徑來處理所有食品相關的請求
+app.use('/food', foodRouter);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

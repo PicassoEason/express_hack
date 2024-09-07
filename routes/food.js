@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
             ADDRESS: item.ADDRESS,
             PERSON_IN_CHARGE: item.PERSON_IN_CHARGE,
             POST_DATE: item.POST_DATE,
+            PHONE:item.PHONE,
             LAT: item.LAT,
             LON: item.LON
         }));

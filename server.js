@@ -1,8 +1,8 @@
 const express = require('express');
-const foodRouter = require('./food');
+const foodRouter = require('./routes/food');
 
 const app = express();
-const port = 3000;
+const port = 5001;
 
 // 使用 /food 路徑來處理所有食品相關的請求
 app.use('/food', foodRouter);

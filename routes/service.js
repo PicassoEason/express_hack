@@ -52,7 +52,7 @@ router.get('/loveRestaurant', async (req, res) => {
 }
 );
 router.get('/sponsor', async (req, res) => {
-    try{
+    try {
         const response = await fetch(sponsor);
         const data = await response.json();
 
@@ -62,12 +62,20 @@ router.get('/sponsor', async (req, res) => {
             起始日期: item.起始日期,
             結束日期: item.結束日期,
             電話: item.聯絡電話,
-            
         }));
 
-        console.log('Filtered data:', filteredData[0]); // 記錄第一項以供檢查
-        res.json(filteredData);
-    }catch(error){
+        // 使用 Map 來去除重複的勸募團體，保留最後一次出現的數據
+        const uniqueMap = new Map();
+        filteredData.forEach(item => {
+            uniqueMap.set(item.勸募團體, item);
+        });
+
+        // 將 Map 轉換回數組
+        const uniqueData = Array.from(uniqueMap.values());
+
+        console.log('Unique filtered data:', uniqueData[0]); // 記錄第一項以供檢查
+        res.json(uniqueData);
+    } catch(error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'An error occurred while fetching or processing data' });
     }

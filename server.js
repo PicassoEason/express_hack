@@ -3,7 +3,7 @@ const cors = require('cors');
 const foodRouter = require('./routes/food');
 const serviceRouter = require('./routes/service');
 const app = express();
-const port = 5001;
+const port = 5004;
 
 // 啟用 CORS
 app.use(cors());

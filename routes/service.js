@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const router = express.Router();
 const emptySpace='https://data.taipei/api/v1/dataset/ffa97c0a-d918-4bc6-a00b-298c39ed4e81?scope=resourceAquire' //臺北市身障機構收容暨空位狀態
 const loveRestaurant='https://data.taipei/api/v1/dataset/bdc841eb-e8c8-41ee-abfc-1e198a96e905?scope=resourceAquire' //愛心餐廳
-
+const sponsor='https://data.taipei/api/v1/dataset/d9d91248-5a97-4e07-956c-9f6af83e7a2a?scope=resourceAquire'; // 我要贊助
 router.get('/emptySpace', async (req, res) => {
     try {
         const response = await fetch(emptySpace);
@@ -51,5 +51,26 @@ router.get('/loveRestaurant', async (req, res) => {
     }
 }
 );
+router.get('/sponsor', async (req, res) => {
+    try{
+        const response = await fetch(sponsor);
+        const data = await response.json();
+
+        // 假設數據在 data.result.results 中
+        const filteredData = data.result.results.map(item => ({
+            勸募團體: item.勸募團體,
+            起始日期: item.起始日期,
+            結束日期: item.結束日期,
+            電話: item.聯絡電話,
+            
+        }));
+
+        console.log('Filtered data:', filteredData[0]); // 記錄第一項以供檢查
+        res.json(filteredData);
+    }catch(error){
+        console.error('Error:', error);
+        res.status(500).json({ error: 'An error occurred while fetching or processing data' });
+    }
+});
 
 module.exports = router;

@@ -5,6 +5,7 @@ const router = express.Router();
 
 const url = 'https://data.taipei/api/v1/dataset/bdc841eb-e8c8-41ee-abfc-1e198a96e905?scope=resourceAquire';//社會救助
 const url_shop='https://data.taipei/api/v1/dataset/209123b3-335f-432f-9521-711e18ce3388?scope=resourceAquire'; // 7-11
+
 router.get('/', async (req, res) => {
     try {
         const response = await fetch(url);
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
             LON: item.LON
         }));
 
-        console.log('Filtered data:', filteredData[0]); // 記錄第一項以供檢查
+        // console.log('Filtered data:', filteredData[0]); // 記錄第一項以供檢查
         res.json(filteredData);
     } catch (error) {
         console.error('Error:', error);
@@ -37,7 +38,7 @@ router.get('/shop', async (req, res) => {
             ADDRESS: item.聯絡地址,
          
         }));
-        console.log('Filtered data:', filteredData[0]);
+        // console.log('Filtered data:', filteredData[0]);
         res.json(filteredData);
     }
     catch(error){
@@ -45,5 +46,8 @@ router.get('/shop', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching or processing data' });
     }
 });
+
+
+
 
 module.exports = router;

@@ -1,5 +1,8 @@
 const express = require('express');
 const fetch = require('node-fetch');
+const fs = require('fs');
+const csv = require('csv-parser');
+const path = require('path');
 
 const router = express.Router();
 const emptySpace='https://data.taipei/api/v1/dataset/ffa97c0a-d918-4bc6-a00b-298c39ed4e81?scope=resourceAquire' //臺北市身障機構收容暨空位狀態
@@ -79,6 +82,33 @@ router.get('/sponsor', async (req, res) => {
         console.error('Error:', error);
         res.status(500).json({ error: 'An error occurred while fetching or processing data' });
     }
+});
+
+router.get('/friendlyShops', (req, res) => {
+    const results = [];
+    const csvFilePath = path.join(__dirname, '../assets/臺北市無障礙友善店家.csv');
+
+    fs.createReadStream(csvFilePath)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', () => {
+            const filteredData = results.map(item => ({
+                序號: item.序號,
+                名稱: item.名稱,
+                地址: item.地址,
+                電話: item.電話,
+                無障礙友善說明: item.無障礙友善說明,
+                Longitude: item.Longitude,
+                Latitude: item.Latitude
+            }));
+
+            console.log('Filtered data:', filteredData[0]); // Log the first item for checking
+            res.json(filteredData);
+        })
+        .on('error', (error) => {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'An error occurred while reading or processing the CSV file' });
+        });
 });
 
 module.exports = router;
